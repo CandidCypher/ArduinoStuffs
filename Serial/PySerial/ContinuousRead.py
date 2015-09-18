@@ -14,4 +14,6 @@ import serial
 ser = serial.Serial('/dev/ttyACM0', 9600)
 while 1:
     val = ser.readline()
-    print(val)
+    format_input = str(val, 'ascii').split(",")
+    print(format_input)
+    print("AcX: {}".format(format_input[0]))
