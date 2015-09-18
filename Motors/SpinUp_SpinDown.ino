@@ -4,4 +4,4 @@
  *
  * Distributed under terms of the MIT license.
  */
-
+This requires a for loop to run the full spin up and full spindown
