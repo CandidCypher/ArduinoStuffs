@@ -11,9 +11,16 @@
 """
 
 import serial
+import time
+
+
 ser = serial.Serial('/dev/ttyACM0', 9600)
 while 1:
+    start = time.time()
     val = ser.readline()
     format_input = str(val, 'ascii').split(",")
-    print(format_input)
-    print("AcX: {}".format(format_input[0]))
+    AcX = format_input[0]
+    print("AcX {}".format(AcX))
+    end = time.time()
+    time_taken = end - start
+    print("Time Elapsed:", time_taken)
