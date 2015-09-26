@@ -20,7 +20,9 @@ while 1:
     val = ser.readline()
     format_input = str(val, 'ascii').split(",")
     AcX = format_input[0]
-    print("AcX {}".format(AcX))
+    AcY = format_input[1]
+    AcZ = format_input[2]
+    print("AcX {}, AcY {}, AcZ {}".format(AcX, AcY, AcZ))
     end = time.time()
     time_taken = end - start
     print("Time Elapsed:", time_taken)
