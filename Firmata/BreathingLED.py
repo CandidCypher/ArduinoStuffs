@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # vim:fenc=utf-8
 #
-# Copyright © 2015 cameron <cameron@Megatron-Dev>
+# Copyright © 2015 cameron <www.candidcypher.com>
 #
 # Distributed under terms of the MIT license.
 
