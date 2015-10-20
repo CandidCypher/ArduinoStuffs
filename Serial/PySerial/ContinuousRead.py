@@ -14,7 +14,7 @@ import serial
 import time
 
 
-ser = serial.Serial('/dev/ttyACM0', 9600)
+ser = serial.Serial('/dev/ttyACM2', 9600)
 while 1:
     start = time.time()
     val = ser.readline()
@@ -22,7 +22,10 @@ while 1:
     AcX = format_input[0]
     AcY = format_input[1]
     AcZ = format_input[2]
-    print("AcX {}, AcY {}, AcZ {}".format(AcX, AcY, AcZ))
+    GxX = format_input[3]
+    GxY = format_input[4]
+    GyZ = format_input[5]
+    print("AcX {}, AcY {}, AcZ {}, GxX {}, GxY {}, GxZ {}".format(AcX, AcY, AcZ,GxX, GxY, GyZ))
     end = time.time()
     time_taken = end - start
     print("Time Elapsed:", time_taken)
