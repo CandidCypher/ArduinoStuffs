@@ -2,53 +2,69 @@
 # -*- coding: utf-8 -*-
 # vim:fenc=utf-8
 #
-# Copyright © 2015 CoroWare Robotics Solutions <corobot.net>
+# Copyright © 2015 cameron <cameron@Megatron-Dev>
 #
 # Distributed under terms of the MIT license.
-# Author: Cameron Owens
-# Date: Oct 20, 2015
-
 
 """
-This software is provided "AS-IS" and provides no warranty.
+This is the second script for building the face tracker.
 """
 
-from pyfirmata import ArduinoMega
-import time
-from pyfirmata import INPUT, OUTPUT, SERVO
 import cv2
+import pyfirmata
 
-# Constants to configure the board
+
+face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
+
 port = "/dev/ttyACM0"
-board = ArduinoMega(port)
-time.sleep(2)
+board = pyfirmata.ArduinoMega(port)
+board.digital[9].mode = pyfirmata.OUTPUT
+board.digital[8].mode = pyfirmata.OUTPUT
+board.digital[10].mode = pyfirmata.OUTPUT
+board.digital[11].mode = pyfirmata.OUTPUT
 
-# Initializing Sequence
-# servo_tilt = board.get_pin('d:#:o')
-# servo_pan = board.get_pin('d:#:o')
-board.digital[9].mode = SERVO
-board.digital[8].mode = SERVO
+video_capture = cv2.VideoCapture(0)
 
-board.digital[8].write(0)
-board.digital[9].write(0)
-i = 0
-while i < 180:
-    board.digital[8].write(i)
-    time.sleep(0.1)
-    i += 15
-#for i in range(0, 180, 1):
-#    board.digital[9].write(i)
-#    time.sleep(00.01)
-board.digital[9].write(90)
+while True:
+    ret, frame = video_capture.read()
+    gray_image = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
-i = 0
-while i < 180:
-    board.digital[9].write(i)
-    time.sleep(0.1)
-    i += 15
-# for some strange reason doesn't like increments below
-#for i in range(0, 180, 1):
-#    board.digital[8].write(i)
-#    time.sleep(0.001)
-board.digital[8].write(90)
-board.digital[9].write(90)
+    faces = face_cascade.detectMultiScale(gray_image,
+                                          scaleFactor=1.1,
+                                          minNeighbors=5,
+                                          minSize=(30, 30),
+                                          flags=cv2.cv.CV_HAAR_SCALE_IMAGE
+                                          )
+    for (x, y, w, h) in faces:
+        cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 0, 255), 2)
+        center_point = ((x+(x+w))/2, (y+(y+h))/2)
+        cv2.rectangle(frame, center_point, center_point, (255, 0, 0), 2)
+
+        # Pan Servo Control
+        if center_point[0] > 320:
+            board.digital[9].write(1)
+            board.digital[8].write(0)
+        elif center_point[0] < 320:
+            board.digital[8].write(1)
+            board.digital[9].write(0)
+        else:
+            board.digital[8].write(0)
+            board.digital[9].write(0)
+
+        # Tilt Servo Control
+        if center_point[1] > 240:
+            board.digital[10].write(1)
+            board.digital[11].write(0)
+        elif center_point[1] < 240:
+            board.digital[11].write(1)
+            board.digital[10].write(0)
+        else:
+            board.digital[10].write(0)
+            board.digital[11].write(0)
+    cv2.imshow('Video', frame)
+
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+
+video_capture.release()
+cv2.destroyAllWindows()
