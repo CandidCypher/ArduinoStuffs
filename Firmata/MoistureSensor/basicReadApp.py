@@ -11,22 +11,18 @@ This module starts to integrate the analog read of a sensor into PySide
 """
 
 from PySide import QtGui, QtCore
-from pyfirmata import ArduinoMega, util
-import time
+import zmq
 
 sensor_app = QtGui.QApplication([])
-port = "/dev/ttyACM0"
-board = ArduinoMega(port)
-sensor = board.get_pin('a:0:i')
-iterator = util.Iterator(board)
-iterator.start()
-time.sleep(1)
+context = zmq.Context()
+socket = context.socket(zmq.SUB)
+print "Getting Data"
+socket.connect("tcp://10.0.2.15:5556")
 
 
 def get_value():
-    read_val = sensor.read()
-    corrected_val = 1 - read_val
-    lcd.display(corrected_val)
+    read_val = socket.recv_string()
+    lcd.display(read_val)
 
 lcd = QtGui.QLCDNumber()
 lcd.setDigitCount(8)
