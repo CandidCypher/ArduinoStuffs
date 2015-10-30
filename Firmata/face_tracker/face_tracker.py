@@ -11,17 +11,17 @@ This is the second script for building the face tracker.
 """
 
 import cv2
-import pyfirmata
+# import pyfirmata
 
 
 face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 
-port = "/dev/ttyACM0"
-board = pyfirmata.ArduinoMega(port)
-board.digital[9].mode = pyfirmata.OUTPUT
-board.digital[8].mode = pyfirmata.OUTPUT
-board.digital[10].mode = pyfirmata.OUTPUT
-board.digital[11].mode = pyfirmata.OUTPUT
+# port = "/dev/ttyACM0"
+# board = pyfirmata.ArduinoMega(port)
+#board.digital[9].mode = pyfirmata.OUTPUT
+#board.digital[8].mode = pyfirmata.OUTPUT
+#board.digital[10].mode = pyfirmata.OUTPUT
+#board.digital[11].mode = pyfirmata.OUTPUT
 
 video_capture = cv2.VideoCapture(0)
 
@@ -41,26 +41,26 @@ while True:
         cv2.rectangle(frame, center_point, center_point, (255, 0, 0), 2)
 
         # Pan Servo Control
-        if center_point[0] > 320:
-            board.digital[9].write(1)
-            board.digital[8].write(0)
-        elif center_point[0] < 320:
-            board.digital[8].write(1)
-            board.digital[9].write(0)
-        else:
-            board.digital[8].write(0)
-            board.digital[9].write(0)
+#        if center_point[0] > 320:
+#            board.digital[9].write(1)
+#            board.digital[8].write(0)
+#        elif center_point[0] < 320:
+#            board.digital[8].write(1)
+#            board.digital[9].write(0)
+#        else:
+#            board.digital[8].write(0)
+#            board.digital[9].write(0)
 
         # Tilt Servo Control
-        if center_point[1] > 240:
-            board.digital[10].write(1)
-            board.digital[11].write(0)
-        elif center_point[1] < 240:
-            board.digital[11].write(1)
-            board.digital[10].write(0)
-        else:
-            board.digital[10].write(0)
-            board.digital[11].write(0)
+#        if center_point[1] > 240:
+#            board.digital[10].write(1)
+#            board.digital[11].write(0)
+#        elif center_point[1] < 240:
+#            board.digital[11].write(1)
+#            board.digital[10].write(0)
+#        else:
+#            board.digital[10].write(0)
+#            board.digital[11].write(0)
     cv2.imshow('Video', frame)
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
