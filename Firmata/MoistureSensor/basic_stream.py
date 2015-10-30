@@ -35,7 +35,11 @@ def get_value():
 
 
 def stream_value(message):
-    socket.send(b'{}'.format(str(message)))
+    string_message = str(message)
+    print string_message
+    bytes_val = bytes(string_message)
+    print bytes_val
+    socket.send(bytes_val)
 
 try:
     while True:
