@@ -15,7 +15,7 @@ from pyfirmata import ArduinoMega
 from pyfirmata import OUTPUT, INPUT, PWM
 import time
 
-port = "/dev/ttyACM0"
+port = "/dev/ttyS3"
 board = ArduinoMega(port)
 
 ledPin = board.get_pin('d:2:p')
